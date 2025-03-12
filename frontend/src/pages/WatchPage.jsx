@@ -202,7 +202,9 @@ const WatchPage = () => {
                     {content.title || content.name}
                   </h4>
                   <h4 className="text-center">
-                    {new Date(content?.release_date).getFullYear()}
+                    {content?.release_date
+                      ? new Date(content?.release_date).getFullYear()
+                      : new Date(content?.first_air_date).getFullYear()}
                   </h4>
                 </SwiperSlide>
               ))}

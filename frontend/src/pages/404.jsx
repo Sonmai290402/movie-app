@@ -9,12 +9,14 @@ const NotFoundPage = () => {
     >
       <header className="absolute top-0 left-0 p-4 bg-black w-full ">
         <Link to={"/"}>
-          <img src="/netflix-logo.png" alt="Netflix" className="h-8" />
+          <span className="text-5xl md:text-6xl font-bold text-red-600">
+            LOGO
+          </span>
         </Link>
       </header>
-      <main className="flex items-center justify-center flex-col error-page--content z-10">
-        <h1 className="text-7xl font-semibold mb-4">Lost your way?</h1>
-        <p className="mb-6 text-xl">
+      <main className="flex items-center justify-center flex-col z-10 mx-2">
+        <h1 className="text-5xl md:text-7xl font-bold mb-4">Lost your way?</h1>
+        <p className="mb-6 text-xl text-center">
           Sorry, we can't find that page. You'll find lots to explore on the
           home page.
         </p>

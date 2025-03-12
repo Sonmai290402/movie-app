@@ -7,10 +7,11 @@ export async function searchPerson(req, res) {
     const response = await fetchFromTMDB(
       `https://api.themoviedb.org/3/search/person?query=${query}&include_adult=false&language=en-US&page=1`
     );
-    if (response.results.length === 0) {
+    if (!response.results || response.results.length === 0) {
       return res.status(404).send(null);
     }
-    await User.findByIdAndUpdate(req.user._id, {
+
+    await User.findByIdAndUpdate(req.mongoUser._id, {
       $push: {
         searchHistory: {
           id: response.results[0].id,
@@ -34,10 +35,10 @@ export async function searchMovie(req, res) {
     const response = await fetchFromTMDB(
       `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`
     );
-    if (response.results.length === 0) {
+    if (!response.results || response.results.length === 0) {
       return res.status(404).send(null);
     }
-    await User.findByIdAndUpdate(req.user._id, {
+    await User.findByIdAndUpdate(req.mongoUser._id, {
       $push: {
         searchHistory: {
           id: response.results[0].id,
@@ -61,10 +62,10 @@ export async function searchTv(req, res) {
     const response = await fetchFromTMDB(
       `https://api.themoviedb.org/3/search/tv?query=${query}&include_adult=false&language=en-US&page=1`
     );
-    if (response.results.length === 0) {
+    if (!response.results || response.results.length === 0) {
       return res.status(404).send(null);
     }
-    await User.findByIdAndUpdate(req.user._id, {
+    await User.findByIdAndUpdate(req.mongoUser._id, {
       $push: {
         searchHistory: {
           id: response.results[0].id,
@@ -84,7 +85,9 @@ export async function searchTv(req, res) {
 
 export async function getSearchHistory(req, res) {
   try {
-    res.status(200).json({ success: true, content: req.user.searchHistory });
+    res
+      .status(200)
+      .json({ success: true, content: req.mongoUser.searchHistory });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -94,7 +97,7 @@ export async function deleteSearchHistory(req, res) {
   let { id } = req.params;
   id = parseInt(id);
   try {
-    await User.findByIdAndUpdate(req.user._id, {
+    await User.findByIdAndUpdate(req.mongoUser._id, {
       $pull: {
         searchHistory: {
           id: id,

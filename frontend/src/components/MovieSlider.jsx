@@ -55,7 +55,7 @@ const MovieSlider = ({ category }) => {
               className="block group cursor-pointer"
             >
               <div className="rounded-lg overflow-hidden">
-                {formattedCategoryName === "Top rated" ? (
+                {formattedCategoryName === "Popular" ? (
                   <>
                     <img
                       src={SMALL_IMG_BASE_URL + item.poster_path}
