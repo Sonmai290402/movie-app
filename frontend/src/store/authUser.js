@@ -4,21 +4,29 @@ import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
   user: null,
+  setUser: (user) => set({ user }),
   isSigningUp: false,
   isCheckingAuth: true,
   isLoggingOut: false,
   isLoggingIn: false,
-  signup: async (credentials) => {
-    set({ isSigningUp: true });
-    try {
-      const response = await axios.post("/api/v1/auth/signup", credentials);
-      set({ user: response.data.user, isSigningUp: false });
-      toast.success("Account created successfully");
-    } catch (error) {
-      toast.error(error.response.data.message || "Signup failed");
-      set({ isSigningUp: false, user: null });
-    }
-  },
+  // signup: async (credentials) => {
+  //   set({ isSigningUp: true });
+  //   try {
+  //     // const { signUp } = useSignUp();
+  //     await signUp.create({
+  //       emailAddress: credentials.email,
+  //       password: credentials.password,
+  //       username: credentials.username,
+  //     });
+  //     await signUp.prepareEmailAddressVerification();
+  //     toast.success("Verification email sent!");
+  //     set({ isSigningUp: false });
+  //     toast.success("Account created successfully");
+  //   } catch (error) {
+  //     toast.error(error.response.data.message || "Signup failed");
+  //     set({ isSigningUp: false, user: null });
+  //   }
+  // },
   login: async (credentials) => {
     set({ isLoggingIn: true });
     try {
@@ -29,26 +37,5 @@ export const useAuthStore = create((set) => ({
       toast.error(error.response.data.message || "Login failed");
     }
   },
-  logout: async () => {
-    set({ isLoggingOut: true });
-    try {
-      await axios.post("/api/v1/auth/logout");
-      set({ user: null, isLoggingOut: false });
-      toast.success("Logged out successfully");
-    } catch (error) {
-      set({ isLoggingOut: false });
-      toast.error(error.response.data.message || "Logout failed");
-    }
-  },
-  authCheck: async () => {
-    set({ isCheckingAuth: true });
-    try {
-      const response = await axios.get("/api/v1/auth/authCheck");
-
-      set({ user: response.data.user, isCheckingAuth: false });
-    } catch (error) {
-      console.log(" authCheck: ~ error:", error);
-      set({ isCheckingAuth: false, user: null });
-    }
-  },
+  logout: () => set({ user: null }),
 }));

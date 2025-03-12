@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/authUser";
-import { Search, LogOut, Menu } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { useContentStore } from "../store/content";
+import { UserButton } from "@clerk/clerk-react";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-  const { user, logout } = useAuthStore();
   const { setContentType } = useContentStore();
 
   return (
@@ -22,7 +21,7 @@ const NavBar = () => {
         </Link>
 
         {/* Desktop NavBar */}
-        <div className="hidden sm:flex gap-2 items-center">
+        <div className="hidden sm:flex gap-5 items-center">
           <Link
             to={"/"}
             className="hover:underline"
@@ -43,16 +42,12 @@ const NavBar = () => {
         </div>
       </div>
 
-      <div className="flex gap-2 items-center z-50">
+      <div className="flex gap-5 items-center z-50">
         <Link to={"/search"}>
           <Search className="size-6 cursor-pointer" />
         </Link>
-        <img
-          src={user.image}
-          alt="Avatar"
-          className="h-8 rounded cursor-pointer"
-        />
-        <LogOut className="size-6 cursor-pointer" onClick={logout} />
+        <UserButton />
+        {/* <SignOutButton /> */}
         <div className="sm:hidden">
           <Menu className="size-6 cursor-pointer" onClick={toggleMobileMenu} />
         </div>

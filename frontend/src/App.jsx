@@ -4,22 +4,17 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Footer from "./components/Footer";
 import { Toaster } from "react-hot-toast";
-import { useEffect } from "react";
-import { useAuthStore } from "./store/authUser";
 import { Loader } from "lucide-react";
 import WatchPage from "./pages/WatchPage";
 import SearchPage from "./pages/SearchPage";
 import HistoryPage from "./pages/HistoryPage";
 import NotFoundPage from "./pages/404";
+import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-react";
 
 function App() {
-  const { user, authCheck, isCheckingAuth } = useAuthStore();
+  const { isLoaded } = useAuth();
 
-  useEffect(() => {
-    authCheck();
-  }, [authCheck]);
-
-  if (isCheckingAuth) {
+  if (!isLoaded) {
     return (
       <div className="h-screen">
         <div className="flex justify-center items-center bg-black h-full">
@@ -34,23 +29,43 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route
           path="/login"
-          element={!user ? <LoginPage /> : <Navigate to={"/"} />}
+          element={
+            <SignedOut>
+              <LoginPage />
+            </SignedOut>
+          }
         />
         <Route
           path="/signup"
-          element={!user ? <SignupPage /> : <Navigate to={"/"} />}
+          element={
+            <SignedOut>
+              <SignupPage />
+            </SignedOut>
+          }
         />
         <Route
           path="/watch/:id"
-          element={user ? <WatchPage /> : <Navigate to={"/login"} />}
+          element={
+            <SignedIn>
+              <WatchPage />
+            </SignedIn>
+          }
         />
         <Route
           path="/search"
-          element={user ? <SearchPage /> : <Navigate to={"/login"} />}
+          element={
+            <SignedIn>
+              <SearchPage />
+            </SignedIn>
+          }
         />
         <Route
           path="/history"
-          element={user ? <HistoryPage /> : <Navigate to={"/login"} />}
+          element={
+            <SignedIn>
+              <HistoryPage />
+            </SignedIn>
+          }
         />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>

@@ -1,9 +1,9 @@
 import HomeScreen from "./HomeScreen";
 import AuthScreen from "./AuthScreen";
-import { useAuthStore } from "../../store/authUser";
+import { useUser } from "@clerk/clerk-react";
 
 const HomePage = () => {
-  const { user } = useAuthStore();
+  const { user } = useUser();
   return <>{user ? <HomeScreen /> : <AuthScreen />}</>;
 };
 
